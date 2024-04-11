@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0
 VERSION = 4
 PATCHLEVEL = 14
-SUBLEVEL = 316
-EXTRAVERSION =
+SUBLEVEL = 341
+EXTRAVERSION = -openela
+
 NAME = Petit Gorille
 
 # *DOCUMENTATION*
@@ -375,9 +376,9 @@ else
 HOSTCC	= gcc
 HOSTCXX	= g++
 endif
-HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 \
+HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 \
 		-fomit-frame-pointer -std=gnu89 $(HOST_LFS_CFLAGS)
-HOSTCXXFLAGS := -O2 $(HOST_LFS_CFLAGS)
+HOSTCXXFLAGS := -O3 $(HOST_LFS_CFLAGS)
 HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS)
 HOST_LOADLIBES := $(HOST_LFS_LIBS)
 
@@ -432,9 +433,6 @@ LINUXINCLUDE    := \
 KBUILD_AFLAGS   := -D__ASSEMBLY__ -march=armv8-a+lse
 KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common -fshort-wchar \
-		   -Werror-implicit-function-declaration \
-		   -Wno-format-security \
-		   -Werror \
 		   -Xassembler -march=armv8-a+lse \
 		   -std=gnu89
 KBUILD_CPPFLAGS := -D__KERNEL__
@@ -724,11 +722,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
 
-ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS   += -Os
-else
-KBUILD_CFLAGS   += -O2
-endif
+KBUILD_CFLAGS   += -O3
 
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
@@ -796,7 +790,15 @@ endif
 # Use make W=1 to enable them (see scripts/Makefile.extrawarn)
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 
+ifeq ($(ld-name),lld)
+LDFLAGS += -O3
+endif
+
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+
+# These result in bogus false positives
+KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
+
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
@@ -998,8 +1000,10 @@ KBUILD_CPPFLAGS += $(ARCH_CPPFLAGS) $(KCPPFLAGS)
 KBUILD_AFLAGS   += $(ARCH_AFLAGS)   $(KAFLAGS)
 KBUILD_CFLAGS   += $(ARCH_CFLAGS)   $(KCFLAGS)
 
+
 KBUILD_LDFLAGS_MODULE += --build-id
 LDFLAGS_vmlinux += --build-id
+LDFLAGS_BUILD_ID := --build-id
 
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
 LDFLAGS_vmlinux	+= $(call ld-option, --gc-sections,)
