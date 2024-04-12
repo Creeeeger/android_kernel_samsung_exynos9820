@@ -73,6 +73,32 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
 /*
 * Used by test_cipher()
 */
+#ifdef CONFIG_CRYPTO_FIPS
+#define FIPS_ERR 1
+#define FIPS_NO_ERR 0
+static int IN_FIPS_ERROR = FIPS_NO_ERR;
+#endif
+
+#ifdef CONFIG_CRYPTO_FIPS
+bool in_fips_err(void)
+{
+	return (IN_FIPS_ERROR == FIPS_ERR);
+}
+EXPORT_SYMBOL_GPL(in_fips_err);
+
+void set_in_fips_err(void)
+{
+	IN_FIPS_ERROR = FIPS_ERR;
+}
+EXPORT_SYMBOL_GPL(set_in_fips_err);
+
+const void *get_pointer_in_fips_err(void)
+{
+    return (const void *)&IN_FIPS_ERROR;
+}
+EXPORT_SYMBOL_GPL(get_pointer_in_fips_err);
+#endif
+
 #define ENCRYPT 1
 #define DECRYPT 0
 
