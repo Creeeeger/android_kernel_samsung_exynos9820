@@ -87,7 +87,6 @@ char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
 };
 
 int selinux_android_netlink_route;
-int selinux_android_netlink_getneigh;
 int selinux_policycap_netpeer;
 int selinux_policycap_openperm;
 int selinux_policycap_extsockclass;
@@ -1893,7 +1892,6 @@ static inline int convert_context_handle_invalid_context(struct context *context
 #endif
 	if (!selinux_enforcing) // SEC_SELINUX_PORTING_COMMON Change to use RKP
 		return -EINVAL;
-
 // ] SEC_SELINUX_PORTING_COMMON
 	if (selinux_enforcing)
 		return -EINVAL;
@@ -2087,9 +2085,7 @@ static void security_load_policycaps(void)
 			pr_info("SELinux:  unknown policy capability %u\n",
 				i);
 	}
-
 	selinux_android_netlink_route = policydb.android_netlink_route;
-	selinux_android_netlink_getneigh = policydb.android_netlink_getneigh;
 	selinux_nlmsg_init();
 }
 
@@ -2805,12 +2801,8 @@ err:
 	if (*names) {
 		for (i = 0; i < *len; i++)
 			kfree((*names)[i]);
-		kfree(*names);
 	}
 	kfree(*values);
-	*len = 0;
-	*names = NULL;
-	*values = NULL;
 	goto out;
 }
 

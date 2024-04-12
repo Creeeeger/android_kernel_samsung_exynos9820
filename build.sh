@@ -11,72 +11,12 @@ fi
 export BUILD_JOB_NUMBER=$(grep -c ^processor /proc/cpuinfo)
 RDIR=$(pwd)
 
-# Continue with the rest of your script
 
-:'
-case $MODEL in
-beyond2lte)
-    KERNEL_DEFCONFIG=exynos9820-beyond2lte_defconfig
-    SOC=9820
-    BOARD=SRPRI17C014KU
-;;
-beyond1lte)
-    KERNEL_DEFCONFIG=exynos9820-beyond1lte_defconfig
-    SOC=9820
-    BOARD=SRPRI28B014KU
-;;
-beyond0lte)
-    KERNEL_DEFCONFIG=exynos9820-beyond0lte_defconfig
-    SOC=9820
-    BOARD=SRPRI28A014KU
-;;
-beyondx)
-    KERNEL_DEFCONFIG=exynos9820-beyondx_defconfig
-    SOC=9820
-    BOARD=SRPSC04B011KU
-;;
-d1)
-    KERNEL_DEFCONFIG=exynos9820-d1_defconfig
-    SOC=9825
-    BOARD=SRPSD26B007KU
-;;
-d1x)
-    KERNEL_DEFCONFIG=exynos9820-d1xks_defconfig
-    SOC=9825
-    BOARD=SRPSD23A002KU
-;;
-d2s)
-    KERNEL_DEFCONFIG=exynos9820-d2s_defconfig
-    SOC=9825
-    BOARD=SRPSC14B007KU
-;;
-d2x)
-    KERNEL_DEFCONFIG=exynos9820-d2x_defconfig
-    SOC=9825
-    BOARD=SRPSC14C007KU
-;;
-*)
-    echo "Unknown device: $MODEL setting to beyond2lte"
-    KERNEL_DEFCONFIG=exynos9820-beyond2lte_defconfig
-    SOC=9820
-    BOARD=SRPRI17C014KU
-esac
-'
-
-
-'
-MODEL=beyondx
-export MODEL=beyondx
-KERNEL_DEFCONFIG=exynos9820-beyondx_defconfig
-SOC=9820
-BOARD=SRPSC04B011KU
-'
-
-MODEL=beyond0lte
-export MODEL=beyond0lte
-KERNEL_DEFCONFIG=exynos9820-beyond0lte_defconfig
-SOC=9820
-BOARD=SRPRI28A014KU
+MODEL=d2s
+export MODEL=d2s
+KERNEL_DEFCONFIG=exynos9820-d2s_defconfig
+SOC=9825
+BOARD=SRPSC14B007KU
 
 
 FUNC_BUILD_KERNEL()

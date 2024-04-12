@@ -162,10 +162,7 @@ int fscrypt_do_page_crypto(const struct inode *inode, fscrypt_direction_t rw,
 	sdp_fs_command_t *cmd = NULL;
 #endif
 
-	if (WARN_ON_ONCE(len <= 0))
-		return -EINVAL;
-	if (WARN_ON_ONCE(len % FS_CRYPTO_BLOCK_SIZE != 0))
-		return -EINVAL;
+	BUG_ON(len == 0);
 
 	BUILD_BUG_ON(sizeof(iv) != FS_IV_SIZE);
 	BUILD_BUG_ON(AES_BLOCK_SIZE != FS_IV_SIZE);
@@ -313,8 +310,7 @@ struct page *fscrypt_encrypt_page(const struct inode *inode,
 		return ciphertext_page;
 	}
 
-	if (WARN_ON_ONCE(!PageLocked(page)))
-		return ERR_PTR(-EINVAL);
+	BUG_ON(!PageLocked(page));
 
 	ctx = fscrypt_get_ctx(inode, gfp_flags);
 	if (IS_ERR(ctx))

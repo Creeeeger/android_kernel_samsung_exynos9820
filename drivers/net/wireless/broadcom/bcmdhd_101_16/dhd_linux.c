@@ -8730,7 +8730,7 @@ dhd_attach(osl_t *osh, struct dhd_bus *bus, uint bus_hdrlen)
 	dhd->wakelock_counter = 0;
 	/* wakelocks prevent a system from going into a low power state */
 #ifdef CONFIG_HAS_WAKELOCK
-	dhd_wake_lock_init(dhd->wl_wdwake, dhd_bus_to_dev(bus), "wlan_wd_wake");
+	//dhd_wake_lock_init(dhd->wl_wdwake, dhd_bus_to_dev(bus), "wlan_wd_wake");
 #endif /* CONFIG_HAS_WAKELOCK */
 
 	mutex_init(&dhd->dhd_net_if_mutex);
@@ -17666,19 +17666,19 @@ void dhd_os_wake_lock_init(struct dhd_info *dhd)
 	dhd->wakelock_ctrl_timeout_enable = 0;
 	/* wakelocks prevent a system from going into a low power state */
 #ifdef CONFIG_HAS_WAKELOCK
-	dhd_wake_lock_init(dhd->wl_wifi, dhd_bus_to_dev(dhd->pub.bus), "wlan_wake");
-	dhd_wake_lock_init(dhd->wl_rxwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_rx_wake");
-	dhd_wake_lock_init(dhd->wl_ctrlwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_ctrl_wake");
-	dhd_wake_lock_init(dhd->wl_evtwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_evt_wake");
-	dhd_wake_lock_init(dhd->wl_pmwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_pm_wake");
-	dhd_wake_lock_init(dhd->wl_txflwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_txfl_wake");
+	//dhd_wake_lock_init(dhd->wl_wifi, dhd_bus_to_dev(dhd->pub.bus), "wlan_wake");
+	//dhd_wake_lock_init(dhd->wl_rxwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_rx_wake");
+	//dhd_wake_lock_init(dhd->wl_ctrlwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_ctrl_wake");
+	//dhd_wake_lock_init(dhd->wl_evtwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_evt_wake");
+	//dhd_wake_lock_init(dhd->wl_pmwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_pm_wake");
+	//dhd_wake_lock_init(dhd->wl_txflwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_txfl_wake");
 #ifdef BCMPCIE_OOB_HOST_WAKE
-	dhd_wake_lock_init(dhd->wl_intrwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_oob_irq_wake");
+	//dhd_wake_lock_init(dhd->wl_intrwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_oob_irq_wake");
 #endif /* BCMPCIE_OOB_HOST_WAKE */
 #ifdef DHD_USE_SCAN_WAKELOCK
-	dhd_wake_lock_init(dhd->wl_scanwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_scan_wake");
+	//dhd_wake_lock_init(dhd->wl_scanwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_scan_wake");
 #endif /* DHD_USE_SCAN_WAKELOCK */
-	dhd_wake_lock_init(dhd->wl_nanwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_nan_wake");
+	//dhd_wake_lock_init(dhd->wl_nanwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_nan_wake");
 #endif /* CONFIG_HAS_WAKELOCK */
 #ifdef DHD_TRACE_WAKE_LOCK
 	dhd_wk_lock_trace_init(dhd);

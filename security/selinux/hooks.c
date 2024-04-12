@@ -208,7 +208,6 @@ static DEFINE_MUTEX(selinux_sdcardfs_lock);
 //CONFIG_RKP_KDP
 int selinux_enforcing __kdp_ro;
 #else
-static int selinux_enforcing_boot;
 int selinux_enforcing;
 #endif
 
@@ -220,10 +219,8 @@ static int __init enforcing_setup(char *str)
 	if (!kstrtoul(str, 0, &enforcing))
 // [ SEC_SELINUX_PORTING_COMMON
 #ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
-		selinux_enforcing_boot = 1;
 		selinux_enforcing = 1;
 #elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
-		selinux_enforcing_boot = 0;
 		selinux_enforcing = 0;
 #else
 		selinux_enforcing = enforcing ? 1 : 0;
@@ -603,10 +600,16 @@ static int may_context_mount_inode_relabel(u32 sid,
 	return rc;
 }
 
-static int selinux_is_genfs_special_handling(struct super_block *sb)
+static int selinux_is_sblabel_mnt(struct super_block *sb)
 {
-	/* Special handling. Genfs but also in-core setxattr handler */
-	return	!strcmp(sb->s_type->name, "sysfs") ||
+	struct superblock_security_struct *sbsec = sb->s_security;
+
+	return sbsec->behavior == SECURITY_FS_USE_XATTR ||
+		sbsec->behavior == SECURITY_FS_USE_TRANS ||
+		sbsec->behavior == SECURITY_FS_USE_TASK ||
+		sbsec->behavior == SECURITY_FS_USE_NATIVE ||
+		/* Special handling. Genfs but also in-core setxattr handler */
+		!strcmp(sb->s_type->name, "sysfs") ||
 		!strcmp(sb->s_type->name, "pstore") ||
 		!strcmp(sb->s_type->name, "debugfs") ||
 		!strcmp(sb->s_type->name, "tracefs") ||
@@ -614,34 +617,6 @@ static int selinux_is_genfs_special_handling(struct super_block *sb)
 		(selinux_policycap_cgroupseclabel &&
 		 (!strcmp(sb->s_type->name, "cgroup") ||
 		  !strcmp(sb->s_type->name, "cgroup2")));
-}
-
-static int selinux_is_sblabel_mnt(struct super_block *sb)
-{
-	struct superblock_security_struct *sbsec = sb->s_security;
-
-	/*
-	 * IMPORTANT: Double-check logic in this function when adding a new
-	 * SECURITY_FS_USE_* definition!
-	 */
-	BUILD_BUG_ON(SECURITY_FS_USE_MAX != 7);
-
-	switch (sbsec->behavior) {
-	case SECURITY_FS_USE_XATTR:
-	case SECURITY_FS_USE_TRANS:
-	case SECURITY_FS_USE_TASK:
-	case SECURITY_FS_USE_NATIVE:
-		return 1;
-
-	case SECURITY_FS_USE_GENFS:
-		return selinux_is_genfs_special_handling(sb);
-
-	/* Never allow relabeling on context mounts */
-	case SECURITY_FS_USE_MNTPOINT:
-	case SECURITY_FS_USE_NONE:
-	default:
-		return 0;
-	}
 }
 
 static int sb_finish_set_opts(struct super_block *sb)
@@ -973,8 +948,8 @@ static int selinux_set_mnt_opts(struct super_block *sb,
 		// ] SEC_SELINUX_PORTING_COMMON
 	    !strcmp(sb->s_type->name, "sysfs") ||
 	    !strcmp(sb->s_type->name, "pstore") ||
-	    !strcmp(sb->s_type->name, "bpf") ||
 	    !strcmp(sb->s_type->name, "binder") ||
+	    !strcmp(sb->s_type->name, "bpf") ||
 	    !strcmp(sb->s_type->name, "cgroup") ||
 	    !strcmp(sb->s_type->name, "cgroup2"))
 		sbsec->flags |= SE_SBGENFS;
@@ -1706,7 +1681,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
 			 * inode_doinit with a dentry, before these inodes could
 			 * be used again by userspace.
 			 */
-			goto out_invalid;
+			goto out;
 		}
 
 		len = INITCONTEXTLEN;
@@ -1821,7 +1796,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
 			 * could be used again by userspace.
 			 */
 			if (!dentry)
-				goto out_invalid;
+				goto out;
 			rc = selinux_genfs_get_sid(dentry, sclass,
 						   sbsec->flags, &sid);
 			dput(dentry);
@@ -1834,10 +1809,11 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
 out:
 	spin_lock(&isec->lock);
 	if (isec->initialized == LABEL_PENDING) {
-		if (rc) {
+		if (!sid || rc) {
 			isec->initialized = LABEL_INVALID;
 			goto out_unlock;
 		}
+
 		isec->initialized = LABEL_INITIALIZED;
 		isec->sid = sid;
 	}
@@ -1845,15 +1821,6 @@ out:
 out_unlock:
 	spin_unlock(&isec->lock);
 	return rc;
-
-out_invalid:
-	spin_lock(&isec->lock);
-	if (isec->initialized == LABEL_PENDING) {
-		isec->initialized = LABEL_INVALID;
-		isec->sid = sid;
-	}
-	spin_unlock(&isec->lock);
-	return 0;
 }
 
 /* Convert a Linux signal to an access vector. */
@@ -5562,7 +5529,7 @@ static unsigned int selinux_ip_postroute_compat(struct sk_buff *skb,
 	struct common_audit_data ad;
 	struct lsm_network_audit net = {0,};
 	char *addrp;
-	u8 proto = 0;
+	u8 proto;
 
 	if (sk == NULL)
 		return NF_ACCEPT;
@@ -6956,9 +6923,9 @@ static __init int selinux_init(void)
 
 // [ SEC_SELINUX_PORTING_COMMON
 #ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
-		selinux_enforcing_boot = 1;
+		selinux_enforcing = 1;
 #elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
-		selinux_enforcing_boot = 0;
+		selinux_enforcing = 0;
 #endif
 // ] SEC_SELINUX_PORTING_COMMON
 
