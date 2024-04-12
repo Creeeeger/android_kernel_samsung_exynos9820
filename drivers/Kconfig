@@ -243,6 +243,8 @@ source "drivers/samsung/Kconfig"
 
 source "drivers/vibrator/Kconfig"
 
+source "drivers/kperfmon/Kconfig"
+
 source "drivers/spu_verify/Kconfig"
 
 endmenu
