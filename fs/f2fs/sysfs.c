@@ -1194,12 +1194,10 @@ int __init f2fs_init_sysfs(void)
 
 	ret = kobject_init_and_add(&f2fs_feat, &f2fs_feat_ktype,
 				   NULL, "features");
-	if (ret) {
-		kobject_put(&f2fs_feat);
+	if (ret)
 		kset_unregister(&f2fs_kset);
-	} else {
+	else
 		f2fs_proc_root = proc_mkdir("fs/f2fs", NULL);
-	}
 	return ret;
 }
 
@@ -1235,11 +1233,8 @@ int f2fs_register_sysfs(struct f2fs_sb_info *sbi)
 	init_completion(&sbi->s_kobj_unregister);
 	err = kobject_init_and_add(&sbi->s_kobj, &f2fs_sb_ktype, NULL,
 				"%s", sb->s_id);
-	if (err) {
-		kobject_put(&sbi->s_kobj);
-		wait_for_completion(&sbi->s_kobj_unregister);
+	if (err)
 		return err;
-	}
 
 	if (__volume_is_userdata(sbi)) {
 		err = sysfs_create_link(&f2fs_kset.kobj, &sbi->s_kobj,
@@ -1279,6 +1274,4 @@ void f2fs_unregister_sysfs(struct f2fs_sb_info *sbi)
 		sysfs_delete_link(&f2fs_kset.kobj, &sbi->s_kobj, "userdata");
 
 	kobject_del(&sbi->s_kobj);
-	kobject_put(&sbi->s_kobj);
-	wait_for_completion(&sbi->s_kobj_unregister);
 }
