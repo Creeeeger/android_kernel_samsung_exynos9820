@@ -13,6 +13,7 @@
 *.a
 *.bin
 *.bz2
+*.log
 *.c.[012]*.*
 *.dtb
 *.dtb.S
@@ -51,6 +52,7 @@ modules.builtin
 /TAGS
 /linux
 /vmlinux
+/build
 /vmlinux.32
 /vmlinux-gdb.py
 /vmlinuz
@@ -85,6 +87,7 @@ modules.builtin
 include/config
 include/generated
 arch/*/include/generated
+/ramdisk/split_img/boot.img-kernel
 
 # stgit generated dirs
 patches-*
