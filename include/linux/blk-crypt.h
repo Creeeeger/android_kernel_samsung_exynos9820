@@ -21,7 +21,7 @@
 struct bio;
 struct block_device;
 typedef void	blk_crypt_t;
-
+#define SECTOR_SHIFT 9
 #define BLK_CRYPT_MODE_INLINE_PRIVATE          (127)
 
 struct blk_crypt_algorithm_cbs {
