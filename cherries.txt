@@ -1,0 +1,127 @@
+commit 300311a5bde5bea0d00571a151ff2f3eb95aee3b
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Fri Apr 12 10:08:14 2024 +0000
+
+    Revert "security: remove samsung sdp"
+    
+    This reverts commit 57ef2b8460c0b171ac3b80f1d8b34bc24f597ad7.
+
+commit 384613689dbf4c8ad88779b77a986192b0498eb1
+Author: BlackMesa123 <brother12@hotmail.it>
+Date:   Thu Jul 30 20:59:22 2020 +0300
+
+    selinux: togglable selinux status
+
+commit 809cf03cdc318f1bdcf29c1159ff6cc5168f1903
+Author: Luca Grifo <luca@grifodev.ch>
+Date:   Thu Jul 30 20:30:09 2020 +0300
+
+    selinux: remove debug and enforce flag
+
+
+commit c537158fe2a073fa3e832fc919750189cc5dc5be
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Fri Apr 12 09:48:36 2024 +0000
+
+    make it run
+
+commit 8af09617e194f59b9145ad1fd04e86e9d4c85967 (HEAD -> LineageOS20)
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Mon Apr 15 22:45:42 2024 +0000
+
+    Revert "Revert "drivers: remove kperfmon""
+    
+    This reverts commit a57fc609a12253881645843fa31303d873b9c078.
+
+commit 4635afba3db5aa4255f1cef4f44f0b7bbde826a8
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Mon Apr 15 22:44:16 2024 +0000
+
+    replace variuos driver
+
+commit 1490293ef80745e4fb5db4c2d1bf9dbc96835fb0
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sun Apr 14 16:44:03 2024 +0000
+
+    defconfig: Add permissvve to n10 devices
+
+commit e8d01d85e186f43a786c45b1a3e31d1dc2a180a5 (origin/LineageOS20, remotes/origin/LineageOS20)
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sun Apr 14 10:40:16 2024 +0000
+
+    tzdev: add backup n10
+
+commit 0c3ff1f4eb53e6df5fc8d5483c79854723752210
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sat Apr 13 21:56:55 2024 +0000
+
+    tzdev: fix for n10 idk wtf
+
+commit d13533a4232ec03a7ea4aa683ae2a41bb26ace17
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sat Apr 13 21:04:02 2024 +0000
+
+    Revert "misc: tzdev: Support fallback tzar"
+    
+    This reverts commit d1acd720c4d2e64f8e62c559029314964216a947.
+
+commit d1acd720c4d2e64f8e62c559029314964216a947
+Author: Tim Zimmermann <tim@linux4.de>
+Date:   Sat Dec 10 20:21:49 2022 +0100
+
+    misc: tzdev: Support fallback tzar
+    
+    * As of HVJ5 Note10 Series International (but not Korean) uses older TEE than all other 9820 models
+    
+    Change-Id: Ifb228b6d024fdf6ff39f272b29ac2a53420861e3
+
+commit 0b4aae89f49be9f5ec4ea7c8bd8d42c6197bfaa4
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sat Apr 13 19:45:01 2024 +0000
+
+    samsung sec: add new sec driver from n10 kernel
+
+commit fe0bfb14d20da9e37b44ca39201eae9b957c6ff2
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sat Apr 13 19:39:15 2024 +0000
+
+    tzdev: add n10 tzdev driver
+
+commit dd3e33bff7f0193280d92453f6eedeebf013ece3
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Sat Apr 13 12:11:12 2024 +0000
+
+    FS: replace through old driver
+
+commit ce80e0624e8cee47260de4685a14180978bd455a
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Fri Apr 12 20:21:09 2024 +0000
+
+    Revert "earlycon"
+    
+    This reverts commit ef6eb1a164b0f75132e0caa067c393bfb3563cb8.
+
+commit 1c34901e79e767aa8b01ec48ae8e9515b2d146aa
+Author: Creeeeger <bauaasgd@gmail.com>
+Date:   Fri Apr 12 20:20:31 2024 +0000
+
+    Crypto: port modules over
+
+commit ef6eb1a164b0f75132e0caa067c393bfb3563cb8
+Author: Markuss Broks <markuss.broks@gmail.com>
+Date:   Tue Jun 14 17:01:20 2022 +0300
+
+    earlycon
+
+commit 3a2463fb2a54bf93fad63788bb1a83c4b6b6be0b
+Author: John Vincent <git@tenseventyseven.cf>
+Date:   Sun Feb 26 17:21:02 2023 +0800
+
+    gpu: arm: Import Mali Bifrost R38P1 drivers from Samsung
+    
+    The Mali Bifrost version R38P1 from Mali and Samsung. This also includes updates to the Exynos backend API. Patches from Google and other third-party changes not included here, and will be in a separate patch series.
+    
+    Pulled from the Galaxy A51 kernel source for Android 13.
+    
+    Signed-off-by: John Vincent <git@tenseventyseven.cf>
+
