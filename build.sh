@@ -11,13 +11,19 @@ fi
 export BUILD_JOB_NUMBER=$(grep -c ^processor /proc/cpuinfo)
 RDIR=$(pwd)
 
-
+'
 MODEL=d2s
 export MODEL=d2s
 KERNEL_DEFCONFIG=exynos9820-d2s_defconfig
 SOC=9825
 BOARD=SRPSC14B007KU
+'
 
+MODEL=beyondx
+export MODEL=beyondx
+KERNEL_DEFCONFIG=exynos9820-beyondx_defconfig
+SOC=9820
+BOARD=SRPSC04B011KU
 
 FUNC_BUILD_KERNEL()
 {
